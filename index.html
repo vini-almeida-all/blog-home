@@ -553,14 +553,26 @@
     .blog-pagination__current {
       width: 56px;
       height: 56px;
+      padding: 0;
       border: 1px solid var(--text-primary);
       border-radius: var(--radius-pill);
       background: var(--surface-default);
-      display: grid;
-      place-items: center;
+      appearance: none;
+      -webkit-appearance: none;
+      font-family: inherit;
       font-size: 18px;
       line-height: 18px;
       font-weight: 800;
+      color: var(--text-primary);
+      text-align: center;
+      caret-color: var(--text-primary);
+      outline: none;
+      box-shadow: none;
+    }
+    .blog-pagination__current:focus,
+    .blog-pagination__current:focus-visible {
+      outline: none;
+      box-shadow: none;
     }
     .blog-pagination__total {
       font-size: 18px;
@@ -809,7 +821,22 @@
       }
 
       .blog-pagination {
-        gap: 24px;
+        gap: 12px;
+      }
+
+      .blog-pagination__info {
+        gap: 12px;
+      }
+
+      .blog-pagination__current {
+        width: 42px;
+        height: 42px;
+      }
+
+      .blog-pagination__current,
+      .blog-pagination__total {
+        font-size: 16px;
+        line-height: 16px;
       }
     }
 
@@ -1000,14 +1027,25 @@
 
       <section class="page-section pagination-section" data-figma-node="2428:4390" aria-label="Paginação do blog">
         <div class="blog-pagination" data-figma-node="2428:4491">
-          <button class="blog-pagination__control blog-pagination__control--previous" type="button" aria-label="Página anterior" aria-disabled="true">
+          <button class="blog-pagination__control blog-pagination__control--previous" id="previousPage" type="button" aria-label="Página anterior" aria-disabled="true">
             <span class="blog-pagination__control-surface"><img src="https://www.figma.com/api/mcp/asset/d0708b23-4493-40f6-b2d8-af7f9e1f171e/fb7ab.svg" alt=""></span>
           </button>
           <div class="blog-pagination__info">
-            <span class="blog-pagination__current" id="currentPage">1</span>
+            <input
+              class="blog-pagination__current"
+              id="currentPage"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              value="1"
+              aria-label="Ir para a página"
+              autocomplete="off"
+              spellcheck="false"
+              enterkeyhint="go"
+            >
             <span class="blog-pagination__total">de 169</span>
           </div>
-          <button class="blog-pagination__control" type="button" aria-label="Próxima página" aria-disabled="true">
+          <button class="blog-pagination__control" id="nextPage" type="button" aria-label="Próxima página" aria-disabled="false">
             <span class="blog-pagination__control-surface"><img src="https://www.figma.com/api/mcp/asset/d0708b23-4493-40f6-b2d8-af7f9e1f171e/41ab2.svg" alt=""></span>
           </button>
         </div>
@@ -1235,6 +1273,9 @@
 
       const postsGrid = document.getElementById('postsGrid');
       const currentPage = document.getElementById('currentPage');
+      const previousPage = document.getElementById('previousPage');
+      const nextPage = document.getElementById('nextPage');
+      const totalPages = 169;
       const status = document.getElementById('filterStatus');
       const typeButtons = [...document.querySelectorAll('[data-filter-type]')];
       const subjectButtons = [...document.querySelectorAll('[data-filter-subject]')];
@@ -1324,9 +1365,32 @@
         syncMobileFilterChrome(selection);
       }
 
+      function syncPaginationControls() {
+        currentPage.value = String(state.page);
+        previousPage.setAttribute('aria-disabled', String(state.page <= 1));
+        nextPage.setAttribute('aria-disabled', String(state.page >= totalPages));
+      }
+
+      function setPage(nextPageNumber, { scroll = true } = {}) {
+        const parsed = Number.parseInt(String(nextPageNumber), 10);
+        if (!Number.isInteger(parsed) || parsed < 1 || parsed > totalPages) {
+          currentPage.value = String(state.page);
+          return false;
+        }
+        if (parsed === state.page) {
+          currentPage.value = String(state.page);
+          return false;
+        }
+        state.page = parsed;
+        syncPaginationControls();
+        status.textContent = `Página ${state.page} de ${totalPages} selecionada.`;
+        if (scroll) scrollToPostsStart();
+        return true;
+      }
+
       function resetPagination() {
         state.page = 1;
-        currentPage.textContent = '1';
+        syncPaginationControls();
       }
 
       function scrollToPostsStart() {
@@ -1500,6 +1564,32 @@
         }
       });
 
+      currentPage.addEventListener('focus', () => currentPage.select());
+      currentPage.addEventListener('click', () => currentPage.select());
+      currentPage.addEventListener('input', () => {
+        currentPage.value = currentPage.value.replace(/\D/g, '').slice(0, String(totalPages).length);
+      });
+      currentPage.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        const requestedPage = currentPage.value;
+        if (!setPage(requestedPage)) currentPage.select();
+        else currentPage.blur();
+      });
+      currentPage.addEventListener('blur', () => {
+        currentPage.value = String(state.page);
+      });
+
+      previousPage.addEventListener('click', () => {
+        if (state.page <= 1) return;
+        setPage(state.page - 1);
+      });
+
+      nextPage.addEventListener('click', () => {
+        if (state.page >= totalPages) return;
+        setPage(state.page + 1);
+      });
+
       initHeroCarousel();
 
       let resizeTimer = 0;
@@ -1521,6 +1611,7 @@
           }
         }, 80);
       });
+      syncPaginationControls();
       render();
       if (document.fonts?.ready) {
         document.fonts.ready.then(() => requestAnimationFrame(() => applyCardTruncation(postsGrid)));
