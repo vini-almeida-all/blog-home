@@ -1,0 +1,1531 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Se Liga na Leitura — Blog Home (Desktop + Tablet + Mobile Prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-primary: #0033a0;
+      --surface-default: #ffffff;
+      --surface-subtle: #f7f7f7;
+      --text-primary: #303030;
+      --text-secondary: #525252;
+      --text-muted: #999999;
+      --neutral-200: #d9d9d9;
+      --light-blue-100: #e7f4fd;
+      --seliga-cream: #f5f2eb;
+      --seliga-yellow: #f5da67;
+      --seliga-lime: #d4f29a;
+      --seliga-lilac: #a3b1db;
+      --seliga-coral: #f2784b;
+      --seliga-aqua: #a1ede9;
+      --seliga-pink: #ffd2fa;
+      --radius-16: 16px;
+      --radius-24: 24px;
+      --radius-40: 40px;
+      --radius-pill: 999px;
+      --spacing-16: 16px;
+      --spacing-20: 20px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-36: 36px;
+      --spacing-48: 48px;
+      --page-container: 1368px;
+      --page-content: 1304px;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--surface-subtle); }
+    body {
+      margin: 0;
+      min-width: 0;
+      background: var(--surface-subtle);
+      color: var(--text-primary);
+      font-family: "Nunito", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    img { display: block; }
+    button, a { font: inherit; }
+    button { color: inherit; }
+
+    .blog-page {
+      width: 100%;
+      background: var(--surface-subtle);
+    }
+
+    /* Figma: BlogStickyHeader 2426:4026 */
+    .blog-sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--seliga-cream);
+      border-bottom: 1px solid var(--text-primary);
+      overflow: hidden;
+    }
+    .blog-sticky-header__inner {
+      width: min(100%, 1368px);
+      height: 64px;
+      padding-inline: 32px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .blog-sticky-header__logo {
+      width: 173px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* Figma: BlogMain 2426:4029 */
+    .blog-main {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-48);
+      padding: 64px 0;
+      overflow: visible;
+      background: var(--surface-subtle);
+    }
+    .page-section {
+      width: min(100%, var(--page-container));
+      padding-inline: 32px;
+    }
+
+    /* Figma: HeaderContainer 2426:4030 */
+    .header-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-48);
+      overflow: hidden;
+    }
+
+    /* Figma: Logo SeLigaNaLeitura 1 — PNG asset, node 2469:5795. */
+    .seliga-main-logo {
+      width: min(100%, 392px);
+      max-width: 392px;
+      height: auto;
+      aspect-ratio: 2500 / 891;
+      object-fit: cover;
+      flex: 0 0 auto;
+    }
+
+    /* Figma: HeroSectionCarousel 2426:4170 — functional behavior from approved HeroSection reference. */
+    .hero-carousel {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-20);
+    }
+    .hero-carousel__viewport {
+      width: 100%;
+      overflow: hidden;
+      border-radius: var(--radius-40);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y;
+    }
+    .hero-carousel__viewport.is-dragging {
+      cursor: grabbing;
+    }
+    .hero-carousel__track {
+      width: 100%;
+      display: flex;
+      transform: translate3d(0, 0, 0);
+      transition: transform 360ms cubic-bezier(.22, .61, .36, 1);
+      will-change: transform;
+    }
+    .hero-carousel__track.is-dragging {
+      transition: none;
+    }
+    .hero-carousel__slide {
+      flex: 0 0 100%;
+      min-width: 0;
+      aspect-ratio: 1320 / 500;
+      overflow: hidden;
+      border-radius: var(--radius-40);
+      background: #0d0d0d;
+    }
+    .hero-carousel__slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .hero-carousel__controls {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-20);
+    }
+    .hero-carousel__button-shell {
+      width: 36px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+    }
+    .hero-carousel__button {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius-pill);
+      background: var(--neutral-200);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background-color 140ms ease;
+    }
+    .hero-carousel__button:hover {
+      background: #bfbfbf;
+    }
+    .hero-carousel__button svg {
+      width: 32px;
+      height: 32px;
+      overflow: visible;
+    }
+    .hero-carousel__button path {
+      fill: none;
+      stroke: #8c8c8c;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 140ms ease;
+    }
+    .hero-carousel__button:hover path {
+      stroke: #666;
+    }
+    .hero-carousel__pagination {
+      min-height: 32px;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      background: var(--neutral-200);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hero-carousel__dot {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .hero-carousel__dot::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #999;
+      transition: background-color 140ms ease;
+    }
+    .hero-carousel__dot:hover::before {
+      background: #737373;
+    }
+    .hero-carousel__dot[aria-current="true"]::before {
+      background: var(--brand-primary);
+    }
+
+    /* Figma: BlogPostsContainer 2426:4106 */
+    .posts-layout {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: var(--spacing-24);
+      align-items: start;
+      padding-top: 36px;
+    }
+    .posts-grid {
+      grid-column: 1 / span 2;
+      min-width: 0;
+      scroll-margin-top: 100px; /* sticky Blog header + reference spacing */
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--spacing-24);
+      align-items: start;
+    }
+    .post-column {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--spacing-24);
+    }
+
+    /* Exact BlogPostCard vertical contract. */
+    .post-card {
+      width: 100%;
+      height: auto;
+      align-self: flex-start;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-24);
+      padding: 24px 24px 36px;
+      border: 1px solid var(--text-primary);
+      border-radius: var(--radius-24);
+      background: var(--surface-default);
+      color: inherit;
+      text-decoration: none;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .post-card__image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      flex: 0 0 auto;
+      object-fit: cover;
+      border-radius: var(--radius-16);
+    }
+    .post-card__content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-16);
+      min-height: 0;
+    }
+    .post-card__chips {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-16);
+    }
+    .taxonomy-chip {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border: 1px solid var(--text-primary);
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      line-height: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .taxonomy-chip__label {
+      display: block;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .taxonomy-chip--all { background: var(--brand-primary); color: #fff; }
+    .taxonomy-chip--articles { background: var(--seliga-yellow); }
+    .taxonomy-chip--lists { background: var(--seliga-lime); }
+    .taxonomy-chip--reviews { background: var(--seliga-lilac); }
+    .taxonomy-chip--interviews { background: var(--seliga-coral); }
+    .taxonomy-chip--news { background: var(--seliga-aqua); }
+    .taxonomy-chip--quizzes { background: var(--seliga-pink); }
+    .taxonomy-chip--subject { background: var(--surface-default); }
+
+    .post-card__title {
+      width: 100%;
+      margin: 0;
+      font-size: 24px;
+      line-height: 30px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-align: left;
+      word-break: normal;
+      overflow-wrap: break-word;
+      min-height: 90px; /* reserve 3 lines at 24/30 without changing clamp behavior */
+    }
+    .post-card__excerpt {
+      width: 100%;
+      margin: 0;
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: left;
+      word-break: normal;
+      overflow-wrap: break-word;
+      min-height: 60px; /* reserve 3 lines at 16/20 without changing clamp behavior */
+    }
+    .post-card__date {
+      width: 100%;
+      margin: 0;
+      font-size: 16px;
+      line-height: 18px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    /* Figma: BlogFilters mode=sidebar state=expanded */
+    .filters-column {
+      grid-column: 3;
+      min-width: 0;
+      position: sticky;
+      top: 100px; /* 64px sticky header + 36px reference spacing */
+      align-self: start;
+    }
+    .blog-filters {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-24);
+      padding: 32px;
+      border: 1px solid var(--text-primary);
+      border-radius: var(--radius-24);
+      background: var(--light-blue-100);
+      overflow: hidden;
+    }
+    .filters-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .filters-header__text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .filters-header__actions {
+      flex: 0 0 auto;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+    }
+    .filters-active-count,
+    .filters-disclosure,
+    .filters-apply {
+      display: none;
+    }
+    .filters-title,
+    .filter-group__title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 20px;
+      font-weight: 800;
+    }
+    .filters-title { color: var(--brand-primary); white-space: nowrap; }
+    .filters-clear {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--brand-primary);
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .filter-scroll-area {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-24);
+    }
+    .filter-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-24);
+    }
+    .filter-chip-wrap {
+      width: 100%;
+      display: flex;
+      align-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--spacing-16);
+    }
+    .filter-chip {
+      min-height: 32px;
+      padding: 9px 15px;
+      font-size: 11px;
+      line-height: 12px;
+      appearance: none;
+      cursor: pointer;
+    }
+    .filter-chip[aria-pressed="false"] {
+      background: #bfbfbf;
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+    .filter-chip[aria-pressed="true"].taxonomy-chip--all {
+      background: var(--brand-primary);
+      border-color: var(--text-primary);
+      color: #fff;
+    }
+    .filter-chip[aria-pressed="true"].taxonomy-chip--subject {
+      background: var(--surface-default);
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+    }
+    .filter-divider {
+      width: 100%;
+      height: 1px;
+      flex: 0 0 1px;
+      background: var(--text-primary);
+    }
+    .filter-chip:focus-visible,
+    .filters-clear:focus-visible,
+    .filters-disclosure:focus-visible,
+    .filters-apply:focus-visible,
+    .post-card:focus-visible,
+    .hero-carousel__button:focus-visible,
+    .hero-carousel__dot:focus-visible,
+    .blog-pagination button:focus-visible {
+      outline: 3px solid rgba(0, 51, 160, .35);
+      outline-offset: 3px;
+    }
+
+    /* Figma: PaginationContainer 2428:4390 */
+    .pagination-section {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-pagination {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+    .blog-pagination__control {
+      width: 36px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      appearance: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-pagination__control-surface {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: var(--neutral-200);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .blog-pagination__control img { width: 32px; height: 32px; }
+    .blog-pagination__control--previous img { transform: rotate(180deg) scaleY(-1); }
+    .blog-pagination__info {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+    }
+    .blog-pagination__current {
+      width: 56px;
+      height: 56px;
+      border: 1px solid var(--text-primary);
+      border-radius: var(--radius-pill);
+      background: var(--surface-default);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      line-height: 18px;
+      font-weight: 800;
+    }
+    .blog-pagination__total {
+      font-size: 18px;
+      line-height: 18px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* Figma: ImageContainer 2428:4515 */
+    .newsletter-section { height: 170.625px; }
+    .newsletter-banner {
+      width: 100%;
+      height: 170.625px;
+      border-radius: var(--radius-16);
+      object-fit: cover;
+      overflow: hidden;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    /* Tablet reference: Figma frame 2433:4559 (768px).
+       Breakpoint approved through prototype QA; the 768px endpoint itself follows Figma exactly. */
+    @media (max-width: 999px) {
+      .blog-sticky-header__inner {
+        max-width: 960px;
+        padding-inline: 32px;
+      }
+
+      .blog-main {
+        padding-inline: 32px;
+      }
+
+      .page-section {
+        padding-inline: 0;
+      }
+
+
+      .posts-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: var(--spacing-24);
+      }
+
+      .posts-grid {
+        grid-column: 1;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .filters-column {
+        grid-column: 2;
+      }
+
+      .newsletter-section {
+        height: auto;
+      }
+
+      .newsletter-banner {
+        height: auto;
+        aspect-ratio: 1304 / 170.625;
+      }
+
+      /* Single-column Blog home override: no adjacent card alignment is needed. */
+      .post-card__title {
+        font-size: 21px;
+        line-height: 26.25px;
+        min-height: 0;
+      }
+
+    }
+
+    /* Mobile reference: Figma frame 2436:4801 (390px).
+       768px remains the Tablet reference; below it the composition becomes single-column.
+       Collapsible filters are content-driven vertically; 390px is a reference width, not a minimum viewport. */
+    @media (max-width: 767px) {
+      .blog-main {
+        gap: var(--spacing-48);
+        padding: 48px 32px;
+      }
+
+      .page-section {
+        width: 100%;
+        padding-inline: 0;
+      }
+
+      .header-container {
+        gap: var(--spacing-32);
+      }
+
+      .hero-carousel__viewport {
+        border-radius: var(--radius-24);
+      }
+
+      .hero-carousel__slide {
+        aspect-ratio: 960 / 500;
+        border-radius: var(--radius-24);
+      }
+
+      .posts-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-48);
+        padding-top: 0;
+      }
+
+      .posts-grid {
+        order: 2;
+        width: 100%;
+        display: block;
+      }
+
+      .post-column {
+        gap: var(--spacing-24);
+      }
+
+      .filters-column {
+        order: 1;
+        width: 100%;
+        position: static;
+        top: auto;
+      }
+
+      .blog-filters {
+        width: 100%;
+        height: fit-content;
+        min-height: 0;
+        padding: 32px;
+        gap: var(--spacing-24);
+        overflow: hidden;
+      }
+
+      .blog-filters.is-expanded {
+        height: fit-content;
+        min-height: 0;
+      }
+
+      .filters-header {
+        flex: 0 0 auto;
+        height: auto;
+        flex-wrap: wrap;
+        column-gap: 16px;
+        row-gap: 8px;
+      }
+
+      .filters-header__text {
+        flex: 0 0 auto;
+        gap: 8px;
+      }
+
+      .filters-header__actions {
+        margin-left: 0;
+      }
+
+      .filters-title {
+        color: var(--text-primary);
+      }
+
+      .filters-active-count {
+        display: block;
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .filters-active-count.is-empty {
+        display: none;
+      }
+
+      .filters-disclosure {
+        display: block;
+        width: 13px;
+        min-width: 13px;
+        height: 16px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--brand-primary);
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .blog-filters:not(.is-expanded) .filter-scroll-area,
+      .blog-filters:not(.is-expanded) .filters-apply {
+        display: none;
+      }
+
+      .blog-filters.is-expanded .filter-scroll-area {
+        display: flex;
+        flex: 0 0 auto;
+        height: auto;
+        overflow: visible;
+      }
+
+      .filters-apply {
+        width: 100%;
+        height: 48px;
+        flex: 0 0 48px;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 24px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--brand-primary);
+        color: #fff;
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .blog-filters.is-expanded .filters-apply {
+        display: flex;
+      }
+    }
+
+    /* 390px and below: BlogPostCard uses the approved compact taxonomy chip. */
+    @media (max-width: 390px) {
+      .post-card__chips .taxonomy-chip {
+        min-height: 32px;
+        padding: 9px 15px;
+        font-size: 11px;
+        line-height: 12px;
+      }
+    }
+
+    /* Narrow mobile: preserve the approved 32px gutters/paddings while allowing
+       content to reflow instead of forcing a 390px minimum canvas. */
+    @media (max-width: 369px) {
+      .filters-active-count {
+        white-space: normal;
+      }
+
+      .blog-pagination {
+        gap: 24px;
+      }
+    }
+
+    /* Ultra-narrow mobile: stack the collapsible filter header and keep both
+       groups left-aligned instead of centering the actions. */
+    @media (max-width: 319px) {
+      .filters-header {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 16px;
+      }
+
+      .filters-header__text {
+        width: 100%;
+        flex: 0 0 auto;
+        align-items: flex-start;
+      }
+
+      .filters-header__actions {
+        margin-left: 0;
+        align-self: flex-start;
+        justify-content: flex-start;
+      }
+
+      .filters-title {
+        font-size: 17px;
+        line-height: 20px;
+        text-align: left;
+        white-space: normal;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-carousel__track,
+      .hero-carousel__button,
+      .hero-carousel__button path,
+      .hero-carousel__dot::before {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blog-page" data-figma-node="2426:4025">
+    <header class="blog-sticky-header" data-figma-node="2426:4026">
+      <div class="blog-sticky-header__inner" data-figma-node="2426:4027">
+        <img
+          class="blog-sticky-header__logo"
+          src="https://www.figma.com/api/mcp/asset/c7661a3e-0050-49f0-96d7-7bb3d4e5bf5b/ccf5b.svg"
+          width="173"
+          height="24"
+          alt="Se Liga na Leitura"
+          data-figma-node="2426:4028"
+        />
+      </div>
+    </header>
+
+    <main class="blog-main" data-figma-node="2426:4029">
+      <section class="page-section header-container" data-figma-node="2426:4030">
+        <img
+          class="seliga-main-logo"
+          src="https://www.figma.com/api/mcp/asset/45930ac1-afd9-4cf4-bb88-d8b00dcdbb4f/9af94.png"
+          width="392"
+          height="139.7088"
+          alt="Se Liga na Leitura"
+          data-figma-node="2469:5795"
+        />
+
+        <div class="hero-carousel" data-figma-node="2426:4170" data-carousel aria-roledescription="carrossel" aria-label="Destaques">
+          <div class="hero-carousel__viewport" data-carousel-viewport>
+            <div class="hero-carousel__track" data-carousel-track>
+              <article class="hero-carousel__slide" aria-label="1 de 4">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/93e69878-5fe8-4787-8399-917a8c19fedd/8bc12.png"
+                  alt="Dia da Ceifa — pré-venda"
+                  draggable="false"
+                />
+              </article>
+              <article class="hero-carousel__slide" aria-label="2 de 4">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/bf90abec-4f61-463f-ad46-d26d6a07de2d/3ada8.png"
+                  alt="Corte de Harmonias Partidas — pré-venda"
+                  draggable="false"
+                />
+              </article>
+              <article class="hero-carousel__slide" aria-label="3 de 4">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/93e69878-5fe8-4787-8399-917a8c19fedd/c0a57.png"
+                  alt="Lê a Mãe é a Culpada"
+                  draggable="false"
+                />
+              </article>
+              <article class="hero-carousel__slide" aria-label="4 de 4">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/93e69878-5fe8-4787-8399-917a8c19fedd/bef27.png"
+                  alt="Dia das Crianças — leve 3, pague 2"
+                  draggable="false"
+                />
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-carousel__controls">
+            <div class="hero-carousel__button-shell">
+              <button class="hero-carousel__button" type="button" data-carousel-prev aria-label="Banner anterior">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <path d="M22 16H10"></path>
+                  <path d="M15.5 10.5L10 16"></path>
+                  <path d="M15.5 21.5L10 16"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="hero-carousel__pagination" aria-label="Paginação do carrossel">
+              <button class="hero-carousel__dot" type="button" data-carousel-dot="0" aria-label="Ir para banner 1" aria-current="true"></button>
+              <button class="hero-carousel__dot" type="button" data-carousel-dot="1" aria-label="Ir para banner 2" aria-current="false"></button>
+              <button class="hero-carousel__dot" type="button" data-carousel-dot="2" aria-label="Ir para banner 3" aria-current="false"></button>
+              <button class="hero-carousel__dot" type="button" data-carousel-dot="3" aria-label="Ir para banner 4" aria-current="false"></button>
+            </div>
+
+            <div class="hero-carousel__button-shell">
+              <button class="hero-carousel__button" type="button" data-carousel-next aria-label="Próximo banner">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <path d="M10 16H22"></path>
+                  <path d="M16.5 10.5L22 16"></path>
+                  <path d="M16.5 21.5L22 16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-section posts-section" data-figma-node="2426:4106" aria-label="Postagens do blog">
+        <div class="posts-layout">
+          <div class="posts-grid" id="postsGrid" aria-live="polite"></div>
+
+          <aside class="filters-column" data-figma-node="2426:4221" aria-label="Filtros de postagens">
+            <div class="blog-filters" data-figma-node="2426:4283">
+              <div class="filters-header">
+                <div class="filters-header__text">
+                  <p class="filters-title">Filtrar postagens</p>
+                  <p class="filters-active-count is-empty" id="filtersActiveCount" aria-hidden="true">0 filtros ativos</p>
+                </div>
+                <div class="filters-header__actions">
+                  <button class="filters-clear" id="clearFilters" type="button">Limpar</button>
+                  <button class="filters-disclosure" id="filtersDisclosure" type="button" aria-expanded="false" aria-controls="filterScrollArea" aria-label="Expandir filtros"><span id="filtersDisclosureIcon" aria-hidden="true">▼</span></button>
+                </div>
+              </div>
+
+              <div class="filter-scroll-area" id="filterScrollArea">
+                <section class="filter-group" aria-labelledby="typeFilterTitle">
+                  <h2 class="filter-group__title" id="typeFilterTitle">Filtrar por tipo</h2>
+                  <div class="filter-chip-wrap" id="typeFilters">
+                    <button class="taxonomy-chip taxonomy-chip--all filter-chip" type="button" data-filter-type="all" aria-pressed="true"><span class="taxonomy-chip__label">TODOS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--articles filter-chip" type="button" data-filter-type="articles" aria-pressed="false"><span class="taxonomy-chip__label">ARTIGOS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--lists filter-chip" type="button" data-filter-type="lists" aria-pressed="false"><span class="taxonomy-chip__label">LISTAS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--reviews filter-chip" type="button" data-filter-type="reviews" aria-pressed="false"><span class="taxonomy-chip__label">RESENHAS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--interviews filter-chip" type="button" data-filter-type="interviews" aria-pressed="false"><span class="taxonomy-chip__label">ENTREVISTAS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--news filter-chip" type="button" data-filter-type="news" aria-pressed="false"><span class="taxonomy-chip__label">ATUALIDADES</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--quizzes filter-chip" type="button" data-filter-type="quizzes" aria-pressed="false"><span class="taxonomy-chip__label">QUIZZES</span></button>
+                  </div>
+                </section>
+
+                <div class="filter-divider" aria-hidden="true"></div>
+
+                <section class="filter-group" aria-labelledby="subjectFilterTitle">
+                  <h2 class="filter-group__title" id="subjectFilterTitle">Filtrar por assunto</h2>
+                  <div class="filter-chip-wrap" id="subjectFilters">
+                    <button class="taxonomy-chip taxonomy-chip--all filter-chip" type="button" data-filter-subject="all" aria-pressed="true"><span class="taxonomy-chip__label">TODOS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="vozes-nacionais" aria-pressed="false"><span class="taxonomy-chip__label">VOZES NACIONAIS</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="papelaria" aria-pressed="false"><span class="taxonomy-chip__label">PAPELARIA</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="kids-family" aria-pressed="false"><span class="taxonomy-chip__label">KIDS &amp; FAMILY</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="ficcao-de-cura" aria-pressed="false"><span class="taxonomy-chip__label">FICÇÃO DE CURA</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="multiverso" aria-pressed="false"><span class="taxonomy-chip__label">MULTIVERSO</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="love-ships" aria-pressed="false" title="LOVE &amp; SHIPS (ROMANCE &amp; BOOKTOK)"><span class="taxonomy-chip__label">LOVE &amp; SHIPS (ROMANCE &amp; BOOKTOK)</span></button>
+                    <button class="taxonomy-chip taxonomy-chip--subject filter-chip" type="button" data-filter-subject="ritual-reset" aria-pressed="false"><span class="taxonomy-chip__label">RITUAL &amp; RESET</span></button>
+                  </div>
+                </section>
+              </div>
+
+              <button class="filters-apply" id="applyFilters" type="button">Aplicar filtros</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page-section pagination-section" data-figma-node="2428:4390" aria-label="Paginação do blog">
+        <div class="blog-pagination" data-figma-node="2428:4491">
+          <button class="blog-pagination__control blog-pagination__control--previous" type="button" aria-label="Página anterior" aria-disabled="true">
+            <span class="blog-pagination__control-surface"><img src="https://www.figma.com/api/mcp/asset/d0708b23-4493-40f6-b2d8-af7f9e1f171e/fb7ab.svg" alt=""></span>
+          </button>
+          <div class="blog-pagination__info">
+            <span class="blog-pagination__current" id="currentPage">1</span>
+            <span class="blog-pagination__total">de 169</span>
+          </div>
+          <button class="blog-pagination__control" type="button" aria-label="Próxima página" aria-disabled="true">
+            <span class="blog-pagination__control-surface"><img src="https://www.figma.com/api/mcp/asset/d0708b23-4493-40f6-b2d8-af7f9e1f171e/41ab2.svg" alt=""></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="page-section newsletter-section" data-figma-node="2428:4515">
+        <img
+          class="newsletter-banner"
+          src="https://www.figma.com/api/mcp/asset/1268788a-cd8f-40c1-bb6f-175ac39ee4f4/f33ec.png"
+          alt="Newsletter Se Liga na Leitura"
+          data-figma-node="2428:4513"
+        />
+      </section>
+    </main>
+  </div>
+
+  <p class="sr-only" id="filterStatus" aria-live="polite"></p>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const FIGMA_ASSET_PREFIX = 'https://www.figma.com/api/mcp/asset/59a59500-0920-429e-a055-2b5aa49244b7';
+
+      function initHeroCarousel() {
+        const root = document.querySelector('[data-carousel]');
+        if (!root) return;
+
+        const viewport = root.querySelector('[data-carousel-viewport]');
+        const track = root.querySelector('[data-carousel-track]');
+        const slides = [...root.querySelectorAll('.hero-carousel__slide')];
+        const dots = [...root.querySelectorAll('[data-carousel-dot]')];
+        const prev = root.querySelector('[data-carousel-prev]');
+        const next = root.querySelector('[data-carousel-next]');
+        if (!viewport || !track || slides.length === 0 || !prev || !next) return;
+
+        let heroIndex = 0;
+        let dragging = false;
+        let pointerId = null;
+        let startX = 0;
+        let deltaX = 0;
+        let suppressClick = false;
+
+        const viewportWidth = () => viewport.getBoundingClientRect().width;
+
+        function updateDots() {
+          dots.forEach((dot, dotIndex) => {
+            dot.setAttribute('aria-current', dotIndex === heroIndex ? 'true' : 'false');
+          });
+        }
+
+        function translateToCurrent(animate = true) {
+          const x = -(heroIndex * viewportWidth());
+          track.classList.toggle('is-dragging', !animate);
+          track.style.transform = `translate3d(${x}px, 0, 0)`;
+          updateDots();
+        }
+
+        function goTo(nextIndex) {
+          heroIndex = Math.max(0, Math.min(slides.length - 1, nextIndex));
+          translateToCurrent(true);
+        }
+
+        function goPrev() {
+          goTo(heroIndex === 0 ? slides.length - 1 : heroIndex - 1);
+        }
+
+        function goNext() {
+          goTo(heroIndex === slides.length - 1 ? 0 : heroIndex + 1);
+        }
+
+        function beginDrag(event) {
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          dragging = true;
+          pointerId = event.pointerId;
+          startX = event.clientX;
+          deltaX = 0;
+          suppressClick = false;
+          viewport.classList.add('is-dragging');
+          track.classList.add('is-dragging');
+          viewport.setPointerCapture(pointerId);
+        }
+
+        function moveDrag(event) {
+          if (!dragging || event.pointerId !== pointerId) return;
+          deltaX = event.clientX - startX;
+          if (Math.abs(deltaX) > 4) suppressClick = true;
+
+          let visualDelta = deltaX;
+          if ((heroIndex === 0 && deltaX > 0) ||
+              (heroIndex === slides.length - 1 && deltaX < 0)) {
+            visualDelta *= 0.35;
+          }
+
+          const x = -(heroIndex * viewportWidth()) + visualDelta;
+          track.style.transform = `translate3d(${x}px, 0, 0)`;
+        }
+
+        function endDrag(event) {
+          if (!dragging || (event.pointerId !== undefined && event.pointerId !== pointerId)) return;
+          dragging = false;
+          viewport.classList.remove('is-dragging');
+          track.classList.remove('is-dragging');
+
+          if (pointerId !== null && viewport.hasPointerCapture(pointerId)) {
+            viewport.releasePointerCapture(pointerId);
+          }
+
+          const threshold = Math.max(40, viewportWidth() * 0.12);
+          if (deltaX <= -threshold && heroIndex < slides.length - 1) {
+            heroIndex += 1;
+          } else if (deltaX >= threshold && heroIndex > 0) {
+            heroIndex -= 1;
+          }
+
+          pointerId = null;
+          deltaX = 0;
+          translateToCurrent(true);
+        }
+
+        prev.addEventListener('click', goPrev);
+        next.addEventListener('click', goNext);
+        dots.forEach((dot, dotIndex) => dot.addEventListener('click', () => goTo(dotIndex)));
+        viewport.addEventListener('pointerdown', beginDrag);
+        viewport.addEventListener('pointermove', moveDrag);
+        viewport.addEventListener('pointerup', endDrag);
+        viewport.addEventListener('pointercancel', endDrag);
+        viewport.addEventListener('click', event => {
+          if (!suppressClick) return;
+          event.preventDefault();
+          event.stopPropagation();
+          suppressClick = false;
+        }, true);
+        window.addEventListener('resize', () => translateToCurrent(false));
+
+        translateToCurrent(false);
+      }
+
+      // Prototype-only subject metadata. Production must receive the canonical taxonomy
+      // from the CMS; subject metadata intentionally does not render on BlogPostCard.
+      // Array order is row-major so the initial 2-column grid matches the Figma visual:
+      // primary-column post 1 beside secondary-column post 1, etc.
+      const posts = [
+        {
+          id: 'ariani-castelo',
+          type: 'interviews',
+          subjects: ['vozes-nacionais', 'love-ships', 'multiverso'],
+          chip: 'ENTREVISTAS',
+          title: 'Ariani Castelo: romantasia e o sucesso de Coração de Cristal Partido',
+          excerpt: 'Se existe algo que a fantasia nacional vem provando nos últimos anos é que não faltam histórias brasileiras capazes de conquistar leitores e ocupar espaço ao lado dos grandes sucessos internacionais. E Ariani Castelo sabe bem disso.',
+          date: '18 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/1e008.png`
+        },
+        {
+          id: 'rivalidade-ardente',
+          type: 'reviews',
+          subjects: ['love-ships'],
+          chip: 'RESENHAS',
+          title: 'Rivalidade Ardente: quando o romance sai do gelo e chega às telas',
+          excerpt: 'Confesso: eu tinha um certo preconceito com romances de hóquei. Não com o hóquei em si, pelo contrário. Gosto muito do esporte e, justamente por isso, fico incomodada quando livros usam o cenário esportivo de qualquer jeito. Então, apesar de Rivalidade Ardente, de Rachel Reid, estar há algum tempo na minha lista, eu nunca tinha me aventurado na série Game Changers. Até Heated Rivalry aparecer nas telas.',
+          date: '15 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/ce6b5.png`
+        },
+        {
+          id: 'bienal-favoritos',
+          type: 'lists',
+          subjects: ['vozes-nacionais', 'papelaria', 'kids-family', 'multiverso', 'ritual-reset'],
+          chip: 'LISTAS',
+          title: '10 livros que fizeram a cabeça da equipe Leitura na Bienal',
+          excerpt: 'A Bienal Internacional do Livro de São Paulo é daqueles lugares em que é impossível sair sem uma nova história para contar — ou, pelo menos, sem um novo livro favorito. Nossa equipe esteve por lá, circulando pelos estandes, descobrindo novidades, reencontrando autores e, claro, fazendo aquilo que a gente mais gosta: garimpando boas histórias. E não podíamos deixar de compartilhar com vocês alguns dos nossos favoritos. Fizemos uma curadoria de 10 livros que fizeram a nossa cabeça na Bienal e que, temos certeza, também podem conquistar a sua.',
+          date: '14 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/b78dd.png`
+        },
+        {
+          id: 'leve-3-pague-2',
+          type: 'articles',
+          subjects: ['papelaria'],
+          chip: 'ARTIGOS',
+          title: 'A promoção mais esperada voltou: Leve 3, Pague 2 na Livraria Leitura!',
+          excerpt: 'A campanha mais querida pelos leitores já faz parte do calendário promocional da Livraria Leitura e retorna para mais uma edição. O objetivo é claro: incentivar a leitura e tornar os livros mais acessíveis para todos.',
+          date: '14 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/e6360.png`
+        },
+        {
+          id: 'o-talisma',
+          type: 'reviews',
+          subjects: ['multiverso', 'ficcao-de-cura'],
+          chip: 'RESENHAS',
+          title: 'O Talismã: Stephen King e Peter Straub entre fantasia e terror',
+          excerpt: 'Há livros que contam uma história. Outros nos fazem atravessar uma história. O Talismã, de Stephen King e Peter Straub, pertence à segunda categoria. Publicado originalmente em 1984, o romance é uma aventura de fantasia sombria que mistura terror, amadurecimento, amizade, perda e coragem em uma jornada tão grandiosa quanto inquietante.',
+          date: '13 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/f5da8.png`
+        },
+        {
+          id: 'romantasia-bienal',
+          type: 'lists',
+          subjects: ['love-ships', 'multiverso', 'kids-family'],
+          chip: 'LISTAS',
+          title: 'Romantasia na Bienal do Livro SP: histórias de magia, aventura e muito romance',
+          excerpt: 'Dragões (à la Tairn, o melhor de todos), reinos, criaturas mágicas, batalhas épicas e, claro, romances capazes de conquistar até os corações mais resistentes… todo esse universo mágico está reunido em um só lugar: na 28ª Bienal Internacional do Livro de São Paulo. O evento, que acontece do dia 4 a 13 de setembro, é o destino ideal para os fãs de romantasia.',
+          date: '11 de setembro de 2026',
+          image: `${FIGMA_ASSET_PREFIX}/8d572.png`
+        }
+      ];
+
+      const typeClass = {
+        articles: 'taxonomy-chip--articles',
+        lists: 'taxonomy-chip--lists',
+        reviews: 'taxonomy-chip--reviews',
+        interviews: 'taxonomy-chip--interviews',
+        news: 'taxonomy-chip--news',
+        quizzes: 'taxonomy-chip--quizzes'
+      };
+
+      const state = {
+        selectedTypes: new Set(),
+        selectedSubjects: new Set(),
+        page: 1
+      };
+      const draftState = {
+        selectedTypes: new Set(),
+        selectedSubjects: new Set()
+      };
+      let mobileFiltersExpanded = false;
+
+      const postsGrid = document.getElementById('postsGrid');
+      const currentPage = document.getElementById('currentPage');
+      const status = document.getElementById('filterStatus');
+      const typeButtons = [...document.querySelectorAll('[data-filter-type]')];
+      const subjectButtons = [...document.querySelectorAll('[data-filter-subject]')];
+      const clearButton = document.getElementById('clearFilters');
+      const filtersPanel = document.querySelector('.blog-filters');
+      const filtersActiveCount = document.getElementById('filtersActiveCount');
+      const filtersDisclosure = document.getElementById('filtersDisclosure');
+      const filtersDisclosureIcon = document.getElementById('filtersDisclosureIcon');
+      const applyFiltersButton = document.getElementById('applyFilters');
+
+      function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, ch => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[ch]));
+      }
+
+      function cardHTML(post) {
+        return `
+          <a class="post-card" href="#" data-post-id="${escapeHTML(post.id)}" aria-label="${escapeHTML(post.title)}">
+            <img class="post-card__image" src="${escapeHTML(post.image)}" alt="" loading="eager">
+            <div class="post-card__content">
+              <div class="post-card__chips">
+                <span class="taxonomy-chip ${typeClass[post.type] || ''}"><span class="taxonomy-chip__label">${escapeHTML(post.chip)}</span></span>
+              </div>
+              <h2 class="post-card__title" data-full-text="${escapeHTML(post.title)}" data-max-lines="3">${escapeHTML(post.title)}</h2>
+              <p class="post-card__excerpt" data-full-text="${escapeHTML(post.excerpt)}" data-max-lines="3">${escapeHTML(post.excerpt)}</p>
+              <p class="post-card__date">${escapeHTML(post.date)}</p>
+            </div>
+          </a>`;
+      }
+
+      function filteredPosts() {
+        return posts.filter(post => {
+          const typeMatch = state.selectedTypes.size === 0 || state.selectedTypes.has(post.type);
+          const subjectMatch = state.selectedSubjects.size === 0 || post.subjects.some(subject => state.selectedSubjects.has(subject));
+          return typeMatch && subjectMatch;
+        });
+      }
+
+      function isMobileFilterLayout() {
+        return window.matchMedia('(max-width: 767px)').matches;
+      }
+
+      function replaceSet(target, source) {
+        target.clear();
+        source.forEach(value => target.add(value));
+      }
+
+      function setsEqual(a, b) {
+        return a.size === b.size && [...a].every(value => b.has(value));
+      }
+
+      function copyCommittedToDraft() {
+        replaceSet(draftState.selectedTypes, state.selectedTypes);
+        replaceSet(draftState.selectedSubjects, state.selectedSubjects);
+      }
+
+      function activeFilterSelection() {
+        return isMobileFilterLayout() && mobileFiltersExpanded ? draftState : state;
+      }
+
+      function syncMobileFilterChrome(selection) {
+        const count = selection.selectedTypes.size + selection.selectedSubjects.size;
+        filtersActiveCount.textContent = `${count} ${count === 1 ? 'filtro ativo' : 'filtros ativos'}`;
+        filtersActiveCount.classList.toggle('is-empty', count === 0);
+        filtersActiveCount.setAttribute('aria-hidden', String(count === 0));
+
+        const expanded = isMobileFilterLayout() && mobileFiltersExpanded;
+        filtersPanel.classList.toggle('is-expanded', expanded);
+        filtersDisclosure.setAttribute('aria-expanded', String(expanded));
+        filtersDisclosure.setAttribute('aria-label', expanded ? 'Recolher filtros' : 'Expandir filtros');
+        filtersDisclosureIcon.textContent = expanded ? '▲' : '▼';
+      }
+
+      function syncButtonState() {
+        const selection = activeFilterSelection();
+        typeButtons.forEach(button => {
+          const value = button.dataset.filterType;
+          const active = value === 'all' ? selection.selectedTypes.size === 0 : selection.selectedTypes.has(value);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        subjectButtons.forEach(button => {
+          const value = button.dataset.filterSubject;
+          const active = value === 'all' ? selection.selectedSubjects.size === 0 : selection.selectedSubjects.has(value);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        syncMobileFilterChrome(selection);
+      }
+
+      function resetPagination() {
+        state.page = 1;
+        currentPage.textContent = '1';
+      }
+
+      function scrollToPostsStart() {
+        const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+        requestAnimationFrame(() => {
+          postsGrid.scrollIntoView({
+            behavior: reduceMotion ? 'auto' : 'smooth',
+            block: 'start'
+          });
+        });
+      }
+
+      function renderedLineCount(element) {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const rects = [...range.getClientRects()].filter(rect => rect.width > 0 && rect.height > 0);
+        const lineTops = [];
+        rects.forEach(rect => {
+          const top = rect.top;
+          if (!lineTops.some(existing => Math.abs(existing - top) < 1)) lineTops.push(top);
+        });
+        return lineTops.length;
+      }
+
+      function truncateWordsToLines(element, maxLines) {
+        const fullText = element.dataset.fullText || element.textContent || '';
+        if (!fullText || maxLines < 1) return;
+
+        element.style.maxHeight = 'none';
+        element.style.height = 'auto';
+        element.style.overflow = 'visible';
+        element.textContent = fullText;
+
+        if (renderedLineCount(element) <= maxLines) {
+          element.removeAttribute('title');
+          element.style.maxHeight = '';
+          element.style.height = '';
+          element.style.overflow = '';
+          return;
+        }
+
+        const words = fullText.trim().split(/\s+/);
+        let low = 1;
+        let high = words.length;
+        let best = 0;
+
+        while (low <= high) {
+          const mid = Math.floor((low + high) / 2);
+          element.textContent = `${words.slice(0, mid).join(' ')}…`;
+          if (renderedLineCount(element) <= maxLines) {
+            best = mid;
+            low = mid + 1;
+          } else {
+            high = mid - 1;
+          }
+        }
+
+        element.textContent = `${words.slice(0, Math.max(best, 1)).join(' ')}…`;
+        element.title = fullText;
+        element.style.maxHeight = '';
+        element.style.height = '';
+        element.style.overflow = '';
+      }
+
+      function applyCardTruncation(scope = postsGrid) {
+        scope.querySelectorAll('[data-max-lines]').forEach(element => {
+          truncateWordsToLines(element, Number(element.dataset.maxLines));
+        });
+      }
+
+      function postColumnCount() {
+        return window.matchMedia('(max-width: 999px)').matches ? 1 : 2;
+      }
+
+      function render() {
+        const visible = filteredPosts();
+        const columnCount = postColumnCount();
+        const columns = Array.from({ length: columnCount }, () => []);
+        visible.forEach((post, index) => columns[index % columnCount].push(post));
+        postsGrid.innerHTML = columns.map((column, index) => `
+          <div class="post-column" data-post-column="${index}">${column.map(cardHTML).join('')}</div>
+        `).join('');
+        postsGrid.querySelectorAll('.post-card').forEach(card => card.addEventListener('click', event => event.preventDefault()));
+        syncButtonState();
+        requestAnimationFrame(() => applyCardTruncation(postsGrid));
+        status.textContent = `${visible.length} ${visible.length === 1 ? 'postagem encontrada' : 'postagens encontradas'}.`;
+      }
+
+      function toggleSelection(set, value) {
+        if (value === 'all') {
+          const changed = set.size > 0;
+          set.clear();
+          return changed;
+        }
+        if (set.has(value)) {
+          set.delete(value);
+        } else {
+          set.add(value);
+        }
+        return true;
+      }
+
+      function commitImmediateFilterChange() {
+        resetPagination();
+        render();
+        scrollToPostsStart();
+      }
+
+      typeButtons.forEach(button => button.addEventListener('click', () => {
+        const target = isMobileFilterLayout() && mobileFiltersExpanded ? draftState.selectedTypes : state.selectedTypes;
+        const changed = toggleSelection(target, button.dataset.filterType);
+        if (!changed) return;
+        if (isMobileFilterLayout() && mobileFiltersExpanded) {
+          syncButtonState();
+          return;
+        }
+        commitImmediateFilterChange();
+      }));
+
+      subjectButtons.forEach(button => button.addEventListener('click', () => {
+        const target = isMobileFilterLayout() && mobileFiltersExpanded ? draftState.selectedSubjects : state.selectedSubjects;
+        const changed = toggleSelection(target, button.dataset.filterSubject);
+        if (!changed) return;
+        if (isMobileFilterLayout() && mobileFiltersExpanded) {
+          syncButtonState();
+          return;
+        }
+        commitImmediateFilterChange();
+      }));
+
+      clearButton.addEventListener('click', () => {
+        if (isMobileFilterLayout() && mobileFiltersExpanded) {
+          const changed = draftState.selectedTypes.size > 0 || draftState.selectedSubjects.size > 0;
+          if (!changed) return;
+          draftState.selectedTypes.clear();
+          draftState.selectedSubjects.clear();
+          syncButtonState();
+          return;
+        }
+
+        const changed = state.selectedTypes.size > 0 || state.selectedSubjects.size > 0;
+        if (!changed) return;
+        state.selectedTypes.clear();
+        state.selectedSubjects.clear();
+        commitImmediateFilterChange();
+      });
+
+      filtersDisclosure.addEventListener('click', () => {
+        if (!isMobileFilterLayout()) return;
+        if (mobileFiltersExpanded) {
+          mobileFiltersExpanded = false;
+          copyCommittedToDraft();
+        } else {
+          copyCommittedToDraft();
+          mobileFiltersExpanded = true;
+        }
+        syncButtonState();
+      });
+
+      applyFiltersButton.addEventListener('click', () => {
+        if (!isMobileFilterLayout()) return;
+        const changed = !setsEqual(state.selectedTypes, draftState.selectedTypes) ||
+          !setsEqual(state.selectedSubjects, draftState.selectedSubjects);
+        replaceSet(state.selectedTypes, draftState.selectedTypes);
+        replaceSet(state.selectedSubjects, draftState.selectedSubjects);
+        mobileFiltersExpanded = false;
+        if (changed) {
+          commitImmediateFilterChange();
+        } else {
+          syncButtonState();
+        }
+      });
+
+      initHeroCarousel();
+
+      let resizeTimer = 0;
+      let renderedColumnCount = postColumnCount();
+      window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          const nextColumnCount = postColumnCount();
+          if (!isMobileFilterLayout() && mobileFiltersExpanded) {
+            mobileFiltersExpanded = false;
+            copyCommittedToDraft();
+          }
+          if (nextColumnCount !== renderedColumnCount) {
+            renderedColumnCount = nextColumnCount;
+            render();
+          } else {
+            syncButtonState();
+            applyCardTruncation(postsGrid);
+          }
+        }, 80);
+      });
+      render();
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => requestAnimationFrame(() => applyCardTruncation(postsGrid)));
+      }
+    })();
+  </script>
+</body>
+</html>
